@@ -1,0 +1,19 @@
+# Prevent accidental commit of environment files
+# Note: .env.example files are allowed and should be committed
+
+# Line endings normalization
+* text=auto
+*.js text eol=lf
+*.jsx text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
