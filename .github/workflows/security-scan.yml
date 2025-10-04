@@ -1,0 +1,117 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run security scan weekly on Monday at 9:00 AM UTC
+    - cron: '0 9 * * 1'
+
+jobs:
+  dependency-audit:
+    name: Dependency Security Audit
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        directory: [backend, frontend]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: ${{ matrix.directory }}/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: ${{ matrix.directory }}
+        run: npm ci
+      
+      - name: Run npm audit
+        working-directory: ${{ matrix.directory }}
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+      
+      - name: Check for outdated packages
+        working-directory: ${{ matrix.directory }}
+        run: npm outdated || true
+
+  secret-scan:
+    name: Secret Detection
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for secret scanning
+      
+      - name: Secret Scanning
+        run: |
+          echo "Scanning for potential secrets..."
+          
+          # Check for .env files in repository
+          if git ls-files | grep -E "^\.env$|^\.env\.[^.example]"; then
+            echo "ERROR: .env files found in repository!"
+            exit 1
+          fi
+          
+          # Check for potential MongoDB connection strings
+          if git grep -E "mongodb(\+srv)?://[^:]+:[^@]+@" -- '*.js' '*.jsx' '*.json' '*.ts' '*.tsx' 2>/dev/null; then
+            echo "ERROR: Potential MongoDB credentials found in code!"
+            exit 1
+          fi
+          
+          # Check for potential JWT secrets (not using process.env)
+          if git grep -E "(JWT_SECRET|jwt.*secret)\s*=\s*['\"][^'\"]{10,}" -- '*.js' '*.jsx' '*.json' '*.ts' '*.tsx' 2>/dev/null | grep -v "process\.env" | grep -v "your_jwt_secret"; then
+            echo "ERROR: Potential hardcoded JWT secret found!"
+            exit 1
+          fi
+          
+          # Check for AWS keys
+          if git grep -E "(AKIA[0-9A-Z]{16}|aws_secret_access_key)" -- '*.js' '*.jsx' '*.json' '*.ts' '*.tsx' 2>/dev/null; then
+            echo "ERROR: Potential AWS credentials found!"
+            exit 1
+          fi
+          
+          echo "✅ No obvious secrets detected in repository"
+      
+      - name: Verify .gitignore
+        run: |
+          if ! grep -q "^\.env$" .gitignore; then
+            echo "ERROR: .env not found in .gitignore"
+            exit 1
+          fi
+          echo "✅ .gitignore properly configured"
+      
+      - name: Check for .env.example files
+        run: |
+          if [ ! -f "backend/.env.example" ]; then
+            echo "WARNING: backend/.env.example not found"
+          fi
+          if [ ! -f "frontend/.env.example" ]; then
+            echo "WARNING: frontend/.env.example not found (optional)"
+          fi
+          echo "✅ Environment template check complete"
+
+  code-security:
+    name: Code Security Analysis
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Run CodeQL Analysis
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript
+      
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3

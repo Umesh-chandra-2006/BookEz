@@ -17,9 +17,11 @@ This guide provides step-by-step instructions for testing the Logiksutra Book Re
    - `Logiksutra-Book-Review-Local.postman_environment.json`
 4. Select the "Logiksutra Book Review - Local" environment
 
+⚠️ **SECURITY NOTE**: The Postman collection contains example credentials (e.g., `password: "password123"`). These are for testing purposes only and should NEVER be used in production or with real user data. Always use unique, strong passwords for actual user accounts.
+
 ### 2. Start the API Server
 ```bash
-cd "D:/Logiksutra- Book Review/backend"
+cd backend
 npm start
 ```
 Server should be running on `http://localhost:5000`

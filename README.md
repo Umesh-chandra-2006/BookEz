@@ -179,13 +179,25 @@ book-review-platform/
    ```
 
 3. **Environment Configuration**
-   Create `.env` file in backend directory:
+   
+   ⚠️ **SECURITY WARNING**: Never commit `.env` files with real credentials to version control!
+   
+   Copy the example environment file and update with your actual values:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` file with your configuration:
    ```env
    PORT=5000
    MONGO_URI=your_mongodb_atlas_connection_string
-   JWT_SECRET=your_jwt_secret_key
+   JWT_SECRET=your_jwt_secret_key_here  # Generate with: openssl rand -base64 32
    NODE_ENV=development
+   JWT_EXPIRE=7d
+   JWT_COOKIE_EXPIRE=7
    ```
+   
+   📝 **Important**: Use a strong, randomly generated JWT secret in production!
 
 4. **Start the backend server**
    ```bash
@@ -208,7 +220,19 @@ book-review-platform/
    npm install
    ```
 
-3. **Start the frontend server**
+3. **Environment Configuration (Optional)**
+   
+   For custom API URL, create `.env` file:
+   ```bash
+   cp .env.example .env
+   ```
+   
+   Edit `.env` with your backend URL:
+   ```env
+   VITE_API_URL=http://localhost:5000/api
+   ```
+
+4. **Start the frontend server**
    ```bash
    npm run dev
    ```
@@ -259,13 +283,21 @@ The frontend includes comprehensive integration with all backend APIs and has be
 
 ## 🔒 Security Features
 
-- **Password Hashing**: bcrypt with salt rounds
-- **JWT Authentication**: Secure token-based auth
+- **Password Hashing**: bcrypt with 12 salt rounds for enhanced security
+- **JWT Authentication**: Secure token-based auth with HTTP-only cookies
 - **Input Validation**: Server-side validation with express-validator
 - **Protected Routes**: Middleware-based route protection
-- **CORS Configuration**: Secure cross-origin requests
-- **Rate Limiting**: API request throttling
-- **Security Headers**: Helmet.js implementation
+- **CORS Configuration**: Secure cross-origin requests with origin whitelisting
+- **Rate Limiting**: API request throttling (100 requests per 15 minutes)
+- **Security Headers**: Helmet.js implementation for XSS and injection protection
+- **Environment Variables**: All sensitive configuration isolated in `.env` files
+- **No Hardcoded Secrets**: All credentials managed through environment variables
+
+⚠️ **Security Best Practices**:
+- Never commit `.env` files to version control
+- Use strong, randomly generated JWT secrets (generate with: `openssl rand -base64 32`)
+- Rotate credentials regularly, especially in production
+- Follow the guidelines in [SECURITY.md](./SECURITY.md) for detailed security practices
 
 ## 📊 Key Features Demonstration
 
