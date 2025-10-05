@@ -1,9 +1,3 @@
-## 📞 API Documentation
-
-Complete Postman collection is available at:
-`./backend/Logiksutra-Book-Review-API.postman_collection.json`
-
-Import this collection to test all API endpoints with pre-configured requests and environment variables.
 # 📚 Book Review Platform - MERN Stack Assignment
 
 A comprehensive full-stack Book Review Platform built with the MERN stack (MongoDB, Express.js, React, Node.js) featuring user authentication, book management, and review system.
@@ -74,6 +68,13 @@ This project fulfills all requirements for the **Fullstack MERN Assignment – B
 - **Axios** - HTTP client
 - **Tailwind CSS** - Styling framework
 - **Lucide React** - Icon library
+
+ ## 📞 API Documentation
+
+Complete Postman collection is available at:
+`./backend/Logiksutra-Book-Review-API.postman_collection.json`
+
+Import this collection to test all API endpoints with pre-configured requests and environment variables.
 
 ## 🗄 Database Schema
 
