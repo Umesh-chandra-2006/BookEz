@@ -1,3 +1,9 @@
+## 📞 API Documentation
+
+Complete Postman collection is available at:
+`./backend/Logiksutra-Book-Review-API.postman_collection.json`
+
+Import this collection to test all API endpoints with pre-configured requests and environment variables.
 # 📚 Book Review Platform - MERN Stack Assignment
 
 A comprehensive full-stack Book Review Platform built with the MERN stack (MongoDB, Express.js, React, Node.js) featuring user authentication, book management, and review system.
@@ -10,7 +16,6 @@ This project fulfills all requirements for the **Fullstack MERN Assignment – B
 
 - **Frontend**: [Add your deployed frontend URL here]
 - **Backend**: [Add your deployed backend URL here]
-- **Postman Collection**: [./backend/Logiksutra-Book-Review-API.postman_collection.json](./backend/Logiksutra-Book-Review-API.postman_collection.json)
 
 ## 📋 Features Implemented
 
@@ -158,62 +163,53 @@ book-review-platform/
 └── README.md
 ```
 
-## 🚀 Installation & Setup
+
+## 🚀 Deployment & Setup
 
 ### Prerequisites
 - Node.js (v16 or higher)
 - MongoDB Atlas account
 - Git
 
-### Backend Setup
+### Backend Deployment (Render)
+1. **Push your code to GitHub**
+2. **Create a new Web Service on [Render](https://render.com/)**
+3. **Connect your GitHub repo**
+4. **Set environment variables in Render dashboard:**
+   - `PORT=5000`
+   - `MONGO_URI=your_mongodb_atlas_connection_string`
+   - `JWT_SECRET=your_jwt_secret_key`
+   - `JWT_EXPIRE=7d`
+   - `NODE_ENV=production`
+5. **Render will use the Dockerfile in /backend automatically**
+6. **Deploy!**
 
-1. **Clone the repository**
-   ```bash
-   git clone [your-repo-url]
-   cd book-review-platform/backend
-   ```
+### Frontend Deployment (Vercel)
+1. **Push your code to GitHub**
+2. **Create a new project on [Vercel](https://vercel.com/)**
+3. **Connect your GitHub repo and select the /frontend folder**
+4. **Set environment variables if needed (e.g., VITE_API_URL for backend endpoint)**
+5. **Vercel will use `npm run build` and serve the frontend automatically**
+6. **Deploy!**
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+### Local Development (Optional)
 
-3. **Environment Configuration**
-   Create `.env` file in backend directory:
-   ```env
-   PORT=5000
-   MONGO_URI=your_mongodb_atlas_connection_string
-   JWT_SECRET=your_jwt_secret_key
-   NODE_ENV=development
-   ```
+#### Backend
+```bash
+cd backend
+npm install
+cp .env.example .env # or create your own .env
+npm run dev
+# Runs on http://localhost:5000
+```
 
-4. **Start the backend server**
-   ```bash
-   npm start
-   # Or for development
-   npm run dev
-   ```
-
-   Server will run on `http://localhost:5000`
-
-### Frontend Setup
-
-1. **Navigate to frontend directory**
-   ```bash
-   cd frontend
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Start the frontend server**
-   ```bash
-   npm run dev
-   ```
-
-   Frontend will run on `http://localhost:3000`
+#### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+# Runs on http://localhost:3000
+```
 
 ## � API Endpoints
 

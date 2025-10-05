@@ -73,18 +73,11 @@ exports.getBooks = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    count: books.length,
-    pagination: {
-      page,
-      limit,
-      totalPages,
-      total,
-      hasNext: page < totalPages,
-      hasPrev: page > 1
-    },
-    data: {
-      books
-    }
+    books,
+    total,
+    totalPages,
+    page,
+    limit
   });
 });
 
@@ -113,13 +106,22 @@ exports.getBook = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: {
-      book: {
-        ...book.toObject(),
-        recentReviews,
-        ratingStats,
-        estimatedReadingTime: book.estimatedReadingTime()
-      }
+    book: {
+      _id: book._id,
+      title: book.title,
+      author: book.author,
+      description: book.description,
+      genre: book.genre,
+      publishedYear: book.publishedYear,
+      pages: book.pages,
+      isbn: book.isbn,
+      language: book.language,
+      publisher: book.publisher,
+      averageRating: book.averageRating,
+      totalReviews: book.totalReviews,
+      addedBy: book.addedBy && book.addedBy.name ? book.addedBy.name : book.addedBy,
+      createdAt: book.createdAt,
+      tags: book.tags || []
     }
   });
 });
@@ -143,9 +145,13 @@ exports.createBook = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    message: 'Book created successfully! Share your literary discovery with the community.',
-    data: {
-      book
+    message: 'Book created successfully',
+    book: {
+      id: book._id,
+      title: book.title,
+      author: book.author,
+      genre: book.genre,
+      publishedYear: book.publishedYear
     }
   });
 });
@@ -343,8 +349,8 @@ exports.searchBooks = asyncHandler(async (req, res, next) => {
   const { q: query, genre, minRating, maxYear, minYear } = req.query;
   const { page, limit, skip } = req.pagination;
 
-  if (!query || query.length < 2) {
-    return next(new ErrorResponse('Search query must be at least 2 characters long', 400));
+  if (!query || query.length < 1) {
+    return next(new ErrorResponse('Search query must be at least 1 character long', 400));
   }
 
   // Build search query
@@ -384,22 +390,10 @@ exports.searchBooks = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    count: books.length,
-    pagination: {
-      page,
-      limit,
-      totalPages,
-      total
-    },
-    query: {
-      searchTerm: query,
-      genre,
-      minRating,
-      minYear,
-      maxYear
-    },
-    data: {
-      books
-    }
+    books,
+    total,
+    totalPages,
+    page,
+    limit
   });
 });

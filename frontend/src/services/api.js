@@ -25,19 +25,21 @@ api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token')
-      window.location.href = '/login'
+      localStorage.removeItem('token');
+      // Show a user-friendly alert before redirecting
+      alert('Your session has expired or you are not authorized. Please log in again.');
+      window.location.href = '/login';
     }
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
 )
 
 // Auth API
 export const authAPI = {
   login: (email, password) => api.post('/auth/login', { email, password }),
-  register: (userData) => api.post('/auth/register', userData),
-  getProfile: () => api.get('/auth/profile'),
-  updateProfile: (profileData) => api.put('/auth/profile', profileData),
+  register: (userData) => api.post('/auth/signup', userData),
+  getProfile: () => api.get('/auth/me'),
+  updateProfile: (profileData) => api.put('/auth/updatedetails', profileData),
   getStats: () => api.get('/auth/stats'),
   logout: () => api.post('/auth/logout'),
 }

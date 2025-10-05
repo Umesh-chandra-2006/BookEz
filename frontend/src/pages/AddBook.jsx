@@ -4,6 +4,18 @@ import { booksAPI } from '../services/api'
 import { BookOpen, Save, X, Plus, Minus } from 'lucide-react'
 
 const AddBook = () => {
+  // Defensive: get theme context
+  let theme = {};
+  try {
+    // Dynamically require useTheme if available
+    // eslint-disable-next-line global-require
+    theme = require('../contexts/ThemeContext').useTheme();
+    theme = theme.theme || {};
+  } catch (e) {
+    console.warn('Theme context not found:', e);
+    theme = { bg: { primary: '', secondary: '', accent: '', input: '' }, text: { primary: '', secondary: '', accent: '' }, border: { input: '' } };
+  }
+  console.log('AddBook theme:', theme);
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -129,18 +141,18 @@ const AddBook = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className={`max-w-4xl mx-auto space-y-8 ${theme.bg.primary}`}>
       {/* Header */}
       <div className="text-center">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4 flex items-center justify-center">
-          <BookOpen className="h-8 w-8 text-primary-600 mr-3" />
+        <h1 className={`text-3xl font-bold ${theme.text.primary} mb-4 flex items-center justify-center`}>
+          <BookOpen className={`h-8 w-8 ${theme.text.accent} mr-3`} />
           Add New Book
         </h1>
-        <p className="text-gray-600">Share a great book with the community</p>
+        <p className={`${theme.text.secondary}`}>Share a great book with the community</p>
       </div>
 
       {/* Form */}
-      <div className="bg-white rounded-lg shadow-md p-8">
+      <div className={`${theme.bg.secondary} rounded-lg shadow-md p-8`}>
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-md mb-6">
             {error}
@@ -151,7 +163,7 @@ const AddBook = () => {
           {/* Basic Information */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="title" className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
                 Title *
               </label>
               <input
@@ -161,13 +173,13 @@ const AddBook = () => {
                 required
                 value={formData.title}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className={`w-full px-3 py-2 border ${theme.border.input} rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 ${theme.bg.input} ${theme.text.primary}`}
                 placeholder="Enter the book title"
               />
             </div>
 
             <div>
-              <label htmlFor="author" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="author" className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
                 Author *
               </label>
               <input
@@ -177,13 +189,13 @@ const AddBook = () => {
                 required
                 value={formData.author}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className={`w-full px-3 py-2 border ${theme.border.input} rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 ${theme.bg.input} ${theme.text.primary}`}
                 placeholder="Enter the author's name"
               />
             </div>
 
             <div>
-              <label htmlFor="isbn" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="isbn" className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
                 ISBN
               </label>
               <input
@@ -192,13 +204,13 @@ const AddBook = () => {
                 type="text"
                 value={formData.isbn}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className={`w-full px-3 py-2 border ${theme.border.input} rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 ${theme.bg.input} ${theme.text.primary}`}
                 placeholder="Enter ISBN (optional)"
               />
             </div>
 
             <div>
-              <label htmlFor="genre" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="genre" className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
                 Genre *
               </label>
               <select
@@ -207,7 +219,7 @@ const AddBook = () => {
                 required
                 value={formData.genre}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className={`w-full px-3 py-2 border ${theme.border.input} rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 ${theme.bg.input} ${theme.text.primary}`}
               >
                 <option value="">Select a genre</option>
                 {genres.map(genre => (
@@ -217,7 +229,7 @@ const AddBook = () => {
             </div>
 
             <div>
-              <label htmlFor="pages" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="pages" className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
                 Number of Pages
               </label>
               <input
@@ -227,13 +239,13 @@ const AddBook = () => {
                 min="1"
                 value={formData.pages}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className={`w-full px-3 py-2 border ${theme.border.input} rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 ${theme.bg.input} ${theme.text.primary}`}
                 placeholder="Enter number of pages"
               />
             </div>
 
             <div>
-              <label htmlFor="publishedYear" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="publishedYear" className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
                 Published Year
               </label>
               <input
@@ -244,13 +256,13 @@ const AddBook = () => {
                 max={new Date().getFullYear()}
                 value={formData.publishedYear}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className={`w-full px-3 py-2 border ${theme.border.input} rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 ${theme.bg.input} ${theme.text.primary}`}
                 placeholder="Enter published year"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label htmlFor="language" className="block text-sm font-medium text-gray-700 mb-2">
+              <label htmlFor="language" className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
                 Language
               </label>
               <select
@@ -258,7 +270,7 @@ const AddBook = () => {
                 name="language"
                 value={formData.language}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className={`w-full px-3 py-2 border ${theme.border.input} rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 ${theme.bg.input} ${theme.text.primary}`}
               >
                 {languages.map(language => (
                   <option key={language} value={language}>{language}</option>
@@ -269,7 +281,7 @@ const AddBook = () => {
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="description" className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
               Description *
             </label>
             <textarea
@@ -279,14 +291,14 @@ const AddBook = () => {
               rows={5}
               value={formData.description}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+              className={`w-full px-3 py-2 border ${theme.border.input} rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 ${theme.bg.input} ${theme.text.primary}`}
               placeholder="Enter a description of the book..."
             />
           </div>
 
           {/* Tags */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
               Tags
             </label>
             <div className="flex space-x-2 mb-3">
@@ -295,7 +307,7 @@ const AddBook = () => {
                 value={currentTag}
                 onChange={(e) => setCurrentTag(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+                className={`flex-1 px-3 py-2 border ${theme.border.input} rounded-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 ${theme.bg.input} ${theme.text.primary}`}
                 placeholder="Add tags (e.g., programming, bestseller, award-winning)"
               />
               <button
@@ -311,13 +323,13 @@ const AddBook = () => {
                 {formData.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center px-3 py-1 bg-primary-100 text-primary-800 text-sm rounded-full"
+                    className={`inline-flex items-center px-3 py-1 ${theme.bg.accent} ${theme.text.accent} text-sm rounded-full`}
                   >
                     {tag}
                     <button
                       type="button"
                       onClick={() => handleRemoveTag(tag)}
-                      className="ml-2 text-primary-600 hover:text-primary-800"
+                      className={`ml-2 ${theme.text.accent} hover:${theme.text.primary}`}
                     >
                       <Minus className="h-3 w-3" />
                     </button>
@@ -328,11 +340,11 @@ const AddBook = () => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+          <div className={`flex justify-end space-x-4 pt-6 border-t ${theme.border.input}`}>
             <button
               type="button"
               onClick={handleCancel}
-              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors flex items-center"
+              className={`px-6 py-2 border ${theme.border.input} ${theme.text.secondary} rounded-md hover:${theme.bg.input} transition-colors flex items-center`}
             >
               <X className="h-4 w-4 mr-2" />
               Cancel

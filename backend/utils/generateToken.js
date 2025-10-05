@@ -38,17 +38,12 @@ const sendTokenResponse = (user, statusCode, res, message = '') => {
     });
   }
 
-  // Prepare user data (without sensitive information)
+  // Prepare user data (clean and minimal)
   const userData = {
     id: user._id,
     name: user.name,
     email: user.email,
-    role: user.role || 'user',
-    isActive: user.isActive,
-    booksCount: user.booksCount || 0,
-    reviewsCount: user.reviewsCount || 0,
-    createdAt: user.createdAt,
-    lastLogin: user.lastLogin
+    role: user.role || 'user'
   };
 
   res
@@ -58,10 +53,7 @@ const sendTokenResponse = (user, statusCode, res, message = '') => {
       success: true,
       message: message || 'Authentication successful',
       token,
-      expiresIn: process.env.JWT_EXPIRE || '7d',
-      data: {
-        user: userData
-      }
+      user: userData
     });
 };
 

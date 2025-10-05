@@ -44,14 +44,14 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // CORS configuration
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-frontend-domain.com'] 
-    : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+// CORS configuration (allow only localhost:3000 for local dev)
+const corsOptions = {
+  origin: 'http://localhost:3000',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-}));
+};
+app.use(cors(corsOptions));
 
 // Body parser middleware
 app.use(express.json({ 

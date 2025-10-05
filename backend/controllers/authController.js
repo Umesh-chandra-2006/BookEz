@@ -54,14 +54,16 @@ exports.login = asyncHandler(async (req, res, next) => {
 // @route   GET /api/auth/me
 // @access  Private
 exports.getMe = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.user.id)
-    .populate('books', 'title averageRating totalReviews')
-    .populate('reviews', 'rating reviewText bookId');
+  const user = await User.findById(req.user.id);
 
   res.status(200).json({
     success: true,
-    data: {
-      user
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt
     }
   });
 });
@@ -92,8 +94,11 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: 'Profile updated successfully',
-    data: {
-      user
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role
     }
   });
 });
@@ -132,8 +137,7 @@ exports.logout = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    message: 'Logged out successfully. Thank you for using Logiksutra Book Review Platform!',
-    data: {}
+    message: 'Logged out successfully'
   });
 });
 
@@ -187,13 +191,11 @@ exports.getStats = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: {
-      booksCount,
-      reviewsCount,
-      averageRatingGiven,
-      ratingDistribution,
-      joinedDate: req.user.createdAt,
-      lastLogin: req.user.lastLogin
+    stats: {
+      books: booksCount,
+      reviews: reviewsCount,
+      averageRating: averageRatingGiven,
+      memberSince: req.user.createdAt
     }
   });
 });

@@ -19,9 +19,7 @@ exports.validateSignup = [
 
   body('password')
     .isLength({ min: 6, max: 128 })
-    .withMessage('Password must be between 6 and 128 characters')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Password must contain at least one lowercase letter, one uppercase letter, and one number'),
+    .withMessage('Password must be between 6 and 128 characters'),
 
   body('confirmPassword')
     .custom((value, { req }) => {
@@ -212,9 +210,7 @@ exports.validatePasswordUpdate = [
 
   body('newPassword')
     .isLength({ min: 6, max: 128 })
-    .withMessage('New password must be between 6 and 128 characters')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('New password must contain at least one lowercase letter, one uppercase letter, and one number'),
+    .withMessage('New password must be between 6 and 128 characters'),
 
   body('confirmNewPassword')
     .custom((value, { req }) => {
@@ -300,8 +296,8 @@ exports.validateSearch = [
   query('q')
     .optional()
     .trim()
-    .isLength({ min: 2, max: 100 })
-    .withMessage('Search query must be between 2 and 100 characters')
+    .isLength({ min: 1, max: 100 })
+    .withMessage('Search query must be between 1 and 100 characters')
     .escape()
 ];
 
@@ -354,6 +350,19 @@ exports.sanitizeRichText = (input) => {
   input = input.replace(/javascript:/gi, '');
   
   return input.trim();
+};
+
+// Handle validation errors
+exports.handleValidationErrors = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const errorMessages = errors.array().map(error => error.msg);
+    return res.status(400).json({
+      success: false,
+      message: errorMessages.join('. ')
+    });
+  }
+  next();
 };
 
 // Rate limiting validation

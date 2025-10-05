@@ -117,28 +117,11 @@ const errorHandler = (err, req, res, next) => {
   const statusCode = error.statusCode || 500;
   const message = error.message || 'Server Error';
 
-  // Prepare error response
+  // Prepare clean error response
   const errorResponse = {
     success: false,
-    message,
-    ...(statusCode === 500 && { error: 'Internal Server Error' })
+    message
   };
-
-  // Add stack trace in development
-  if (process.env.NODE_ENV === 'development') {
-    errorResponse.stack = err.stack;
-  }
-
-  // Add request info for debugging
-  if (process.env.NODE_ENV === 'development') {
-    errorResponse.request = {
-      url: req.originalUrl,
-      method: req.method,
-      params: req.params,
-      query: req.query,
-      body: req.body
-    };
-  }
 
   res.status(statusCode).json(errorResponse);
 };

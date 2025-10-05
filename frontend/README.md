@@ -186,3 +186,5 @@ The frontend is ready for development and testing of authentication features. Th
 - **Backend API**: `../backend/` - Node.js + Express + MongoDB
 - **API Documentation**: `../backend/POSTMAN_TESTING_GUIDE.md`
 - **Postman Collection**: `../backend/Logiksutra-Book-Review-API.postman_collection.json`
+
+# Frontend folder for React app

@@ -1,0 +1,8 @@
+{
+  "info": {
+    "name": "Logiksutra Book Review Platform API",
+    "description": "Complete API collection for the Book Review Platform with authentication, book management, and review system",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  }
+}
