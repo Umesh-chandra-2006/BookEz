@@ -8,8 +8,8 @@ This project fulfills all requirements for the **Fullstack MERN Assignment – B
 
 ## 🚀 Live Demo
 
-- **Frontend**: [Add your deployed frontend URL here]
-- **Backend**: [Add your deployed backend URL here]
+- **Frontend**:  https://book-ez-inky.vercel.app/
+- **Backend**: https://bookez.onrender.com
 
 ## 📋 Features Implemented
 
